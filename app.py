@@ -45,6 +45,9 @@ def login_required(test):
 #----------------------------------------------------------------------------#
 # Controllers.
 #----------------------------------------------------------------------------#
+@app.route('/index')
+def index():
+    return render_template('pages/placeholder.home.html')
 
 
 @app.route('/')
@@ -108,7 +111,7 @@ def upload_file():
             with sr.AudioFile(filepath) as source:
                 audio = r.record(source)
                 res = transcribe(audio, r)
-                return res, 200
+                return render_template('pages/placeholder.home.html', value=res)
     return 'NOT OK', 200
 
 # @app.route('/about')

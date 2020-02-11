@@ -2,7 +2,7 @@ $(function() {
 	var btn = document.getElementById("btn-listen");
 	var cvs = document.getElementById("cvs");
 	var ctx = cvs.getContext("2d");
-
+	var trans = document.getElementById("transcription");
 	var bell = new WaveBell();
 
 	// on lcik of listen
@@ -12,7 +12,7 @@ $(function() {
 		$.ajax({
 			url: "/listen"
 		}).done(function(data) {
-			console.log(data);
+			trans.innerText = data;
 			bell.stop();
 		});
 	});
@@ -35,10 +35,12 @@ $(function() {
 	});
 
 	bell.on("start", function() {
-		btn.innerText = "Stop";
+		btn.innerHTML = '<i class="fa fa-pause"></i>';
+		btn.setAttribute("disabled", true);
 	});
 	bell.on("stop", function() {
-		btn.innerText = "Start";
+		btn.innerHTML = '<i class="fa fa-play"></i>';
+		btn.removeAttribute("disabled");
 		currentValue = 0;
 	});
 
@@ -52,7 +54,7 @@ $(function() {
 		// empty canvas
 		ctx.clearRect(0, 0, 500, 300);
 		// draw audio waveform
-		ctx.strokeStyle = "#6c4";
+		ctx.strokeStyle = "#f96332";
 		for (var i = 0; i < BUF_SIZE; i++) {
 			var h = 250 * buffer[(cursor + i) % BUF_SIZE];
 			var x = i;

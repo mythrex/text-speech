@@ -6,20 +6,44 @@
 {% block content %}
   <div class="container">
     <div class="row">
-      <div class="col col-lg-12">
-        <button class="btn btn-lg btn-primary" id="btn-listen">Hello</button>
+      <div class="col col-sm-12 col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Record Something</h4>
+            <p class="card-text">Wait for 1 second before recoding.</p>
+            <canvas class="screen" width="500" height="300" id="cvs"></canvas>
+            <div class="d-flex">
+              <button class="ml-auto mr-auto btn btn-primary btn-icon btn-round" id="btn-listen">
+                <i class="fa fa-play"></i>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
+      <div class="col col-sm-12 col-md-6">
+        <div class="card" >
+          <div class="card-body">
+            <form method=post enctype="multipart/form-data" action="/transcribe">
+              <input type="file" name="file">
+              <input type="submit" value="Upload">
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col col-sm-12">
+        <div class="card" >
+          <div class="card-body">
+            <h4 class="card-title">Transcription</h4>
+            <blockquote id="transcription">
+              {{value}}
+            </blockquote>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <div class="container">
-    <h2>Draw audio waveform</h2>
-    <canvas class="screen" width="500" height="300" id="cvs"></canvas>
-  </div>
-
-  <form method=post enctype="multipart/form-data" action="/transcribe">
-    <input type="file" name="file">
-    <input type="submit" value="Upload">
-  </form>
 
 {% endblock %}

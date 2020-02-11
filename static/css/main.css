@@ -1,0 +1,18 @@
+.navbar-brand {
+	font-size: 3em;
+	font-weight: "bold";
+}
+
+.screen {
+	display: block;
+	margin: 0 auto;
+}
+
+body {
+	background-color: #f1f1f1;
+}
+
+#transcription {
+	font-size: 2rem;
+	font-family: cursive;
+}
