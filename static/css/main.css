@@ -16,3 +16,11 @@ body {
 	font-size: 2rem;
 	font-family: cursive;
 }
+
+.progress {
+	height: 5px !important;
+}
+.progress-value {
+	font-size: 2em !important;
+	font-weight: "bold" !important;
+}

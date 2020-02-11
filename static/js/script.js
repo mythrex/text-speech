@@ -1,11 +1,20 @@
+Dropzone.autoDiscover = false;
 $(function() {
 	var btn = document.getElementById("btn-listen");
+	var btnTranscribe = document.getElementById("btn-transcribe");
 	var cvs = document.getElementById("cvs");
 	var ctx = cvs.getContext("2d");
 	var trans = document.getElementById("transcription");
 	var bell = new WaveBell();
 
 	// on lcik of listen
+	// Disabling autoDiscover, otherwise Dropzone will try to attach twice.
+	// or disable for specific dropzone:
+	// Dropzone.options.myDropzone = false;
+
+	// Now that the DOM is fully loaded, create the dropzone, and setup the
+	// event listeners
+	//   myDropzone.on("addedfile", function(file) {
 
 	btn.addEventListener("click", function(e) {
 		bell.start(1000 / 25);
@@ -13,9 +22,38 @@ $(function() {
 			url: "/listen"
 		}).done(function(data) {
 			trans.innerText = data;
+			get_sentiment(data, "en");
 			bell.stop();
 		});
 	});
+
+	btnTranscribe.addEventListener("click", function(e) {
+		trans.innerText = "Wait...";
+		$.ajax({
+			url: "/transcribe"
+		}).done(function(data) {
+			trans.innerText = data;
+			get_sentiment(data, "en");
+		});
+	});
+
+	function get_sentiment(text, lang = "en") {
+		$.post(
+			"/sentiment",
+			{
+				inputText: text,
+				inputLanguage: lang
+			},
+			function(data) {
+				percent = (parseFloat(data["documents"][0]["score"]) * 100).toFixed(2);
+				console.log(percent);
+				$("#prog-bar").css({
+					width: `${percent}%`
+				});
+				$("#prog-val").text(percent);
+			}
+		);
+	}
 
 	window.addEventListener("load", function(e) {
 		// start animation on loaded

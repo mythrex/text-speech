@@ -6,10 +6,12 @@ from flask import Flask, render_template, request, flash, redirect, url_for
 from werkzeug.utils import secure_filename
 # from flask.ext.sqlalchemy import SQLAlchemy
 import logging
+import json
 from logging import Formatter, FileHandler
 # from forms import *
 import os
-import speech_recognition as sr
+# import speech_recognition as
+import azure_services as azs
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -55,30 +57,36 @@ def home():
     return render_template('pages/placeholder.home.html')
 
 
-def transcribe(audio, r):
-    try:
-        # for testing purposes, we're just using the default API key
-        # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
-        # instead of `r.recognize_google(audio)`
-        res = r.recognize_google(audio)
-    except sr.UnknownValueError:
-        res = "Google Speech Recognition could not understand audio"
-    except sr.RequestError as e:
-        res = "Could not request results from Google Speech Recognition service; {}".format(
-            e)
-    return res
+# def transcribe(audio, r):
+#     try:
+#         # for testing purposes, we're just using the default API key
+#         # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
+#         # instead of `r.recognize_google(audio)`
+#         res = r.recognize_google(audio)
+#     except sr.UnknownValueError:
+#         res = "Google Speech Recognition could not understand audio"
+#     except sr.RequestError as e:
+#         res = "Could not request results from Google Speech Recognition service; {}".format(
+#             e)
+#     return res
 
+
+# @app.route('/listen')
+# def listen():
+#     r = sr.Recognizer()
+#     with sr.Microphone() as source:
+#         r.adjust_for_ambient_noise(source)
+#         print("Listening..")
+#         audio = r.listen(source)
+#         print("Listening Finished..")
+#         res = transcribe(audio, r)
+#         print(res)
+#     return res, '200'
 
 @app.route('/listen')
 def listen():
-    r = sr.Recognizer()
-    with sr.Microphone() as source:
-        r.adjust_for_ambient_noise(source)
-        print("Listening..")
-        audio = r.listen(source)
-        print("Listening Finished..")
-        res = transcribe(audio, r)
-        print(res)
+    res = azs.listen()
+    print(res)
     return res, '200'
 
 
@@ -90,7 +98,31 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@app.route('/transcribe', methods=['GET', 'POST'])
+# @app.route('/transcribe', methods=['GET', 'POST'])
+# def upload_file():
+#     if request.method == 'POST':
+#         # check if the post request has the file part
+#         if 'file' not in request.files:
+#             flash('No file part')
+#             return redirect(request.url)
+#         file = request.files['file']
+#         # if user does not select file, browser also
+#         # submit an empty part without filename
+#         if file.filename == '':
+#             flash('No selected file')
+#             return redirect(request.url)
+#         if file and allowed_file(file.filename):
+#             filename = secure_filename(file.filename)
+#             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+#             file.save(filepath)
+#             r = sr.Recognizer()
+#             with sr.AudioFile(filepath) as source:
+#                 audio = r.record(source)
+#                 res = transcribe(audio, r)
+#                 return render_template('pages/placeholder.home.html', value=res)
+#     return 'NOT OK', 200
+
+@app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         # check if the post request has the file part
@@ -107,13 +139,24 @@ def upload_file():
             filename = secure_filename(file.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
-            r = sr.Recognizer()
-            with sr.AudioFile(filepath) as source:
-                audio = r.record(source)
-                res = transcribe(audio, r)
-                return render_template('pages/placeholder.home.html', value=res)
-    return 'NOT OK', 200
+            return 'OK', 200
 
+
+@app.route('/transcribe', methods=['GET'])
+def transcribe():
+    filepath = './static/uploads/testing.wav'
+    res = azs.transcribe(filepath)
+    print(res)
+    return res
+
+
+@app.route('/sentiment', methods=['POST'])
+def sentiment():
+    data = request.form
+    input_text = data.get('inputText')
+    input_lang = data.get('inputLanguage')
+    res = azs.get_sentiment(input_text, input_lang)
+    return res, '200'
 # @app.route('/about')
 # def about():
 #     return render_template('pages/placeholder.about.html')

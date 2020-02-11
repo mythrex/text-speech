@@ -1,0 +1,22 @@
+
+Text Analytics
+
+https://westcentralus.api.cognitive.microsoft.com/text/analytics
+
+https://westcentralus.api.cognitive.microsoft.com/text/analytics
+
+https://westcentralus.api.cognitive.microsoft.com/text/analytics
+
+Key 1: 068cfdd32db54592b9951e11cee12510
+
+Key 2: 7f9a59ac8f8b43198fa2bd10565bd9fe
+
+
+
+Speech services
+
+Endpoint: https://westus.api.cognitive.microsoft.com/sts/v1.0
+
+Key 1: a855db9449d64cd587196942540308dc
+
+Key 2: e93aebad7b2242c9bc020e93990af310
