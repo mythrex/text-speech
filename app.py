@@ -2,7 +2,8 @@
 # Imports
 #----------------------------------------------------------------------------#
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash, redirect, url_for
+from werkzeug.utils import secure_filename
 # from flask.ext.sqlalchemy import SQLAlchemy
 import logging
 from logging import Formatter, FileHandler
@@ -16,6 +17,10 @@ import speech_recognition as sr
 
 app = Flask(__name__)
 app.config.from_object('config')
+UPLOAD_FOLDER = './static/uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+if(not os.path.exists(UPLOAD_FOLDER)):
+    os.mkdir(UPLOAD_FOLDER)
 # db = SQLAlchemy(app)
 
 # Automatically tear down SQLAlchemy.
@@ -47,25 +52,64 @@ def home():
     return render_template('pages/placeholder.home.html')
 
 
+def transcribe(audio, r):
+    try:
+        # for testing purposes, we're just using the default API key
+        # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
+        # instead of `r.recognize_google(audio)`
+        res = r.recognize_google(audio)
+    except sr.UnknownValueError:
+        res = "Google Speech Recognition could not understand audio"
+    except sr.RequestError as e:
+        res = "Could not request results from Google Speech Recognition service; {}".format(
+            e)
+    return res
+
+
 @app.route('/listen')
 def listen():
     r = sr.Recognizer()
     with sr.Microphone() as source:
+        r.adjust_for_ambient_noise(source)
         print("Listening..")
         audio = r.listen(source)
         print("Listening Finished..")
-        try:
-            # for testing purposes, we're just using the default API key
-            # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
-            # instead of `r.recognize_google(audio)`
-            res = r.recognize_google(audio)
-        except sr.UnknownValueError:
-            res = "Google Speech Recognition could not understand audio"
-        except sr.RequestError as e:
-            res = "Could not request results from Google Speech Recognition service; {}".format(
-                e)
+        res = transcribe(audio, r)
         print(res)
     return res, '200'
+
+
+ALLOWED_EXTENSIONS = {'wav', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.route('/transcribe', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(filepath)
+            r = sr.Recognizer()
+            with sr.AudioFile(filepath) as source:
+                audio = r.record(source)
+                res = transcribe(audio, r)
+                return res, 200
+    return 'NOT OK', 200
 
 # @app.route('/about')
 # def about():
@@ -124,6 +168,8 @@ if __name__ == '__main__':
 
 # Or specify port manually:
 '''
+
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)

@@ -17,4 +17,9 @@
     <canvas class="screen" width="500" height="300" id="cvs"></canvas>
   </div>
 
+  <form method=post enctype="multipart/form-data" action="/transcribe">
+    <input type="file" name="file">
+    <input type="submit" value="Upload">
+  </form>
+
 {% endblock %}
