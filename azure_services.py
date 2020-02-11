@@ -12,7 +12,8 @@ speech_config = speechsdk.SpeechConfig(
     subscription=speech_key, region=service_region)
 
 
-def listen():
+def listen(lang='en-IN'):
+    speech_config.speech_recognition_language = lang
     speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config)
 
     result = speech_recognizer.recognize_once()
@@ -28,7 +29,8 @@ def listen():
         return ("Speech Recognition canceled: {}".format(cancellation_details.reason))
 
 
-def transcribe(filename):
+def transcribe(filename, lang='en-IN'):
+    speech_config.speech_recognition_language = lang
     audio_filename = filename
     audio_input = speechsdk.AudioConfig(filename=audio_filename)
     # Creates a recognizer with the given settings

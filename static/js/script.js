@@ -6,6 +6,7 @@ $(function() {
 	var ctx = cvs.getContext("2d");
 	var trans = document.getElementById("transcription");
 	var bell = new WaveBell();
+	var lang = $("#lang").text();
 
 	// on lcik of listen
 	// Disabling autoDiscover, otherwise Dropzone will try to attach twice.
@@ -19,10 +20,13 @@ $(function() {
 	btn.addEventListener("click", function(e) {
 		bell.start(1000 / 25);
 		$.ajax({
-			url: "/listen"
+			url: "/listen",
+			data: { lang: lang }
 		}).done(function(data) {
 			trans.innerText = data;
-			get_sentiment(data, "en");
+			if (lang.split("-")[0] == "en") {
+				get_sentiment(data, "en");
+			}
 			bell.stop();
 		});
 	});
@@ -30,10 +34,13 @@ $(function() {
 	btnTranscribe.addEventListener("click", function(e) {
 		trans.innerText = "Wait...";
 		$.ajax({
-			url: "/transcribe"
+			url: "/transcribe",
+			data: { lang: lang }
 		}).done(function(data) {
 			trans.innerText = data;
-			get_sentiment(data, "en");
+			if (lang.split("-")[0] == "en") {
+				get_sentiment(data, "en");
+			}
 		});
 	});
 
