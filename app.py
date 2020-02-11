@@ -57,6 +57,16 @@ def home():
     return render_template('pages/placeholder.home.html')
 
 
+@app.route('/hindi')
+def hindi():
+    return render_template('pages/placeholder.hindi.html')
+
+
+@app.route('/marathi')
+def marathi():
+    return render_template('pages/placeholder.marathi.html')
+
+
 # def transcribe(audio, r):
 #     try:
 #         # for testing purposes, we're just using the default API key
@@ -85,17 +95,18 @@ def home():
 
 @app.route('/listen')
 def listen():
-    res = azs.listen()
-    print(res)
+    lang = request.args.get('lang')
+    res = azs.listen(lang)
     return res, '200'
 
 
-ALLOWED_EXTENSIONS = {'wav', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'wav', 'mp3', 'ogg', 'raw', 'jpeg', 'gif'}
 
 
 def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    # return '.' in filename and \
+    #        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return True
 
 
 # @app.route('/transcribe', methods=['GET', 'POST'])
@@ -145,7 +156,8 @@ def upload_file():
 @app.route('/transcribe', methods=['GET'])
 def transcribe():
     filepath = './static/uploads/testing.wav'
-    res = azs.transcribe(filepath)
+    lang = request.args.get('lang')
+    res = azs.transcribe(filepath, lang)
     print(res)
     return res
 

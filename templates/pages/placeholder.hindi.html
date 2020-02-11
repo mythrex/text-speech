@@ -1,10 +1,11 @@
 <!-- prettier-ignore -->
 {% extends 'layouts/main.html' %}
 
- {% block title %} Speech to Text Demo {%endblock %}
+{% block title %} Speech to Text Demo {%endblock %}
 
 {% block content %}
-<span id="lang" style="display: none;">en-US</span>
+<span id="lang" style="display: none;">hi-IN</span>
+
 
   <div class="container">
     <div class="row">
@@ -46,22 +47,6 @@
             <blockquote id="transcription">
               {{value}}
             </blockquote>
-          </div>
-        </div>
-      </div>
-
-      <div class="col col-sm-12">
-        <div class="card" >
-          <div class="card-body">
-            <h4 class="card-title">Sentiment</h4>
-            <div class="progress-container">
-              <span class="progress-badge text-success">Positive</span>
-              <div class="progress">
-                <div id="prog-bar" class="progress-bar bg-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="1" style="width: 0%;">
-                  <span class="progress-value" id="prog-val">0</span>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
