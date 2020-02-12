@@ -24,3 +24,24 @@ body {
 	font-size: 2em !important;
 	font-weight: "bold" !important;
 }
+
+.navbar-brand img {
+	max-height: 50px;
+}
+
+.splash-screen {
+	background: white;
+	height: 100vh;
+	width: 100vw;
+	display: flex;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 99;
+}
+
+.splash-screen img {
+	margin: auto;
+}
