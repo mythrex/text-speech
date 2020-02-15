@@ -148,9 +148,9 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(filepath)
-            return 'OK', 200
+            # filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'testing.wav'))
+            return './static/uploads/'+filename, 200
 
 
 @app.route('/transcribe', methods=['GET'])
@@ -167,6 +167,7 @@ def sentiment():
     data = request.form
     input_text = data.get('inputText')
     input_lang = data.get('inputLanguage')
+    print("@app.route('/sentiment',", input_text)
     res = azs.get_sentiment(input_text, input_lang)
     return res, '200'
 # @app.route('/about')

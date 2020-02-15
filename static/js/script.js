@@ -6,6 +6,7 @@ var ctx = cvs.getContext("2d");
 var trans = document.getElementById("transcription");
 var bell = new WaveBell();
 var lang = $("#lang").text();
+var filePath = $("#file-path").text();
 
 // on lcik of listen
 // Disabling autoDiscover, otherwise Dropzone will try to attach twice.
@@ -16,30 +17,32 @@ var lang = $("#lang").text();
 // event listeners
 //   myDropzone.on("addedfile", function(file) {
 
-btn.addEventListener("click", function(e) {
-	bell.start(1000 / 25);
-	$.ajax({
-		url: "/listen",
-		data: { lang: lang }
-	}).done(function(data) {
-		trans.innerText = data;
-		if (lang.split("-")[0] == "en") {
-			get_sentiment(data, "en");
-		}
-		bell.stop();
+$(function() {
+	btn.addEventListener("click", function(e) {
+		bell.start(1000 / 25);
+		$.ajax({
+			url: "/listen",
+			data: { lang: lang }
+		}).done(function(data) {
+			trans.innerText = data;
+			if (lang.split("-")[0] == "en") {
+				get_sentiment(data, "en");
+			}
+			bell.stop();
+		});
 	});
-});
 
-btnTranscribe.addEventListener("click", function(e) {
-	trans.innerText = "Wait...";
-	$.ajax({
-		url: "/transcribe",
-		data: { lang: lang }
-	}).done(function(data) {
-		trans.innerText = data;
-		if (lang.split("-")[0] == "en") {
-			get_sentiment(data, "en");
-		}
+	btnTranscribe.addEventListener("click", function(e) {
+		trans.innerText = "Wait...";
+		$.ajax({
+			url: "/transcribe",
+			data: { lang: lang }
+		}).done(function(data) {
+			trans.innerText = data;
+			if (lang.split("-")[0] == "en") {
+				get_sentiment(data, "en");
+			}
+		});
 	});
 });
 
@@ -51,8 +54,39 @@ function get_sentiment(text, lang = "en") {
 			inputLanguage: lang
 		},
 		function(data) {
-			percent = (parseFloat(data["documents"][0]["score"]) * 100).toFixed(2);
-			console.log(percent);
+			var data = {
+				documents: [{ id: "1", score: 0.7847611904144287 }]
+			};
+			let scores = [];
+			for (let i = 0; i < data["documents"].length; i++) {
+				let sentence = data["documents"][i];
+				scores.push((parseFloat(sentence["score"]) * 100).toFixed(2));
+			}
+
+			let text = trans.innerText;
+			let textArr = text.split(".");
+			let textHtml = "";
+			for (let i = 0; i < textArr.length; i++) {
+				let t = textArr[i];
+				let c = "";
+				if (scores[i] < 0.35) {
+					c = "text-danger";
+				} else if (scores[i] > 0.7) {
+					c = "text-success";
+				}
+				if (t.length) {
+					textHtml += `<span class="${c}" data-toggle="tooltip" data-placement="top" title="Score: ${scores[i]}"> ${t}. </span>`;
+				}
+			}
+			console.log(textArr, textHtml);
+			console.log($("#sentiment-text"));
+			$("#sentiment-text").html(textHtml);
+
+			let percent =
+				scores.reduce((total, num) => {
+					return total + num;
+				}, 0) / scores.length;
+
 			$("#prog-bar").css({
 				width: `${percent}%`
 			});
