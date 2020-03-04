@@ -12,6 +12,7 @@ from logging import Formatter, FileHandler
 import os
 # import speech_recognition as
 import azure_services as azs
+import gcp_services as gcs
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -157,18 +158,15 @@ def upload_file():
 def transcribe():
     filepath = './static/uploads/testing.wav'
     lang = request.args.get('lang')
-    res = azs.transcribe(filepath, lang)
-    print(res)
-    return res
+    res = gcs.sample_recognize(filepath, lang)
+    return {"result": res}
 
 
 @app.route('/sentiment', methods=['POST'])
 def sentiment():
     data = request.form
     input_text = data.get('inputText')
-    input_lang = data.get('inputLanguage')
-    print("@app.route('/sentiment',", input_text)
-    res = azs.get_sentiment(input_text, input_lang)
+    res = gcs.analyze_sentiment(input_text)
     return res, '200'
 # @app.route('/about')
 # def about():

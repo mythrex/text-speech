@@ -1,0 +1,450 @@
+[
+	{
+		"words": [
+			{
+				"startTime": "2s",
+				"endTime": "2.200s",
+				"word": "Are",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "2.200s",
+				"endTime": "2.300s",
+				"word": "they",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "2.300s",
+				"endTime": "2.500s",
+				"word": "going",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "2.500s",
+				"endTime": "2.700s",
+				"word": "to",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "2.700s",
+				"endTime": "3s",
+				"word": "send",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "3s",
+				"endTime": "3.100s",
+				"word": "you",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "3.100s",
+				"endTime": "3.500s",
+				"word": "saying",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "3.500s",
+				"endTime": "3.700s",
+				"word": "this",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "3.700s",
+				"endTime": "3.900s",
+				"word": "loan",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "3.900s",
+				"endTime": "4.100s",
+				"word": "was",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "4.100s",
+				"endTime": "4.200s",
+				"word": "in",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "4.200s",
+				"endTime": "4.600s",
+				"word": "personal",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "4.600s",
+				"endTime": "4.900s",
+				"word": "loan,",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "4.900s",
+				"endTime": "5.200s",
+				"word": "right?",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "5.400s",
+				"endTime": "5.500s",
+				"word": "It",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "5.500s",
+				"endTime": "5.700s",
+				"word": "was",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "5.700s",
+				"endTime": "6.100s",
+				"word": "taken",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "6.100s",
+				"endTime": "6.400s",
+				"word": "online",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "6.400s",
+				"endTime": "6.600s",
+				"word": "and",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "6.600s",
+				"endTime": "7.100s",
+				"word": "offline,",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "7.100s",
+				"endTime": "7.400s",
+				"word": "sir.",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "10.800s",
+				"endTime": "11.200s",
+				"word": "Okay,",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "11.200s",
+				"endTime": "11.400s",
+				"word": "so",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "11.400s",
+				"endTime": "11.600s",
+				"word": "you",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "11.600s",
+				"endTime": "11.800s",
+				"word": "watch",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "12.800s",
+				"endTime": "13s",
+				"word": "is",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "13s",
+				"endTime": "13.800s",
+				"word": "updated",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "13.800s",
+				"endTime": "14s",
+				"word": "or",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "14s",
+				"endTime": "14.300s",
+				"word": "not,",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "14.300s",
+				"endTime": "14.500s",
+				"word": "right?",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "15.500s",
+				"endTime": "15.700s",
+				"word": "Yeah.",
+				"speakerTag": 1
+			},
+			{
+				"startTime": "15.700s",
+				"endTime": "15.900s",
+				"word": "Yeah,",
+				"speakerTag": 1
+			},
+			{
+				"startTime": "20.800s",
+				"endTime": "21s",
+				"word": "no",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "21s",
+				"endTime": "21.400s",
+				"word": "problem.",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "23.600s",
+				"endTime": "23.900s",
+				"word": "I",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "23.900s",
+				"endTime": "24.500s",
+				"word": "transfer",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "24.500s",
+				"endTime": "24.700s",
+				"word": "your",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "24.700s",
+				"endTime": "25s",
+				"word": "call",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "25s",
+				"endTime": "25.100s",
+				"word": "to",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "25.100s",
+				"endTime": "25.600s",
+				"word": "our",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "26.100s",
+				"endTime": "26.800s",
+				"word": "department",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "26.800s",
+				"endTime": "26.900s",
+				"word": "of",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "26.900s",
+				"endTime": "27.200s",
+				"word": "loan.",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "27.200s",
+				"endTime": "27.400s",
+				"word": "So",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "27.400s",
+				"endTime": "27.500s",
+				"word": "they",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "27.500s",
+				"endTime": "27.700s",
+				"word": "will",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "27.700s",
+				"endTime": "27.800s",
+				"word": "going",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "27.800s",
+				"endTime": "28s",
+				"word": "to",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "28s",
+				"endTime": "28.200s",
+				"word": "ride",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "28.200s",
+				"endTime": "28.300s",
+				"word": "you",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "28.300s",
+				"endTime": "29s",
+				"word": "accordingly.",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "29s",
+				"endTime": "29.300s",
+				"word": "Okay?",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "31.100s",
+				"endTime": "31.300s",
+				"word": "Yeah.",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "31.700s",
+				"endTime": "31.900s",
+				"word": "Thank",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "31.900s",
+				"endTime": "32s",
+				"word": "you",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "32s",
+				"endTime": "32.200s",
+				"word": "for",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "32.200s",
+				"endTime": "32.500s",
+				"word": "calling",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "33.100s",
+				"endTime": "33.600s",
+				"word": "Capital.",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "33.600s",
+				"endTime": "33.700s",
+				"word": "Have",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "33.700s",
+				"endTime": "33.800s",
+				"word": "a",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "33.800s",
+				"endTime": "34.100s",
+				"word": "good",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "34.100s",
+				"endTime": "34.500s",
+				"word": "day.",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "34.600s",
+				"endTime": "34.800s",
+				"word": "Please",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "34.800s",
+				"endTime": "35s",
+				"word": "stay",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "35s",
+				"endTime": "35.300s",
+				"word": "online",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "35.300s",
+				"endTime": "35.400s",
+				"word": "for",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "35.600s",
+				"endTime": "35.800s",
+				"word": "a",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "35.800s",
+				"endTime": "35.800s",
+				"word": "specific",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "36.200s",
+				"endTime": "36.500s",
+				"word": "enzyme",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "36.500s",
+				"endTime": "37.100s",
+				"word": "transferring",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "37.100s",
+				"endTime": "37.200s",
+				"word": "the",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "37.200s",
+				"endTime": "37.500s",
+				"word": "call.",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "37.500s",
+				"endTime": "37.900s",
+				"word": "Thank",
+				"speakerTag": 2
+			},
+			{
+				"startTime": "37.900s",
+				"endTime": "38.200s",
+				"word": "you.",
+				"speakerTag": 2
+			}
+		]
+	}
+]
