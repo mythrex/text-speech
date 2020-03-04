@@ -158,7 +158,10 @@ def upload_file():
 def transcribe():
     filepath = './static/uploads/testing.wav'
     lang = request.args.get('lang')
-    res = gcs.sample_recognize(filepath, lang)
+    if lang == 'en-US':
+        res = gcs.sample_recognize(filepath, lang)
+    else:
+        res = gcs.sample_recognize(filepath, lang, model="default")
     return {"result": res}
 
 
