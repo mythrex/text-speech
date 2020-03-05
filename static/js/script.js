@@ -1,11 +1,11 @@
 Dropzone.autoDiscover = false;
 var btn = document.getElementById("btn-listen");
 var btnTranscribe = document.getElementById("btn-transcribe");
-var cvs = document.getElementById("cvs");
-var ctx = cvs.getContext("2d");
 var trans = document.getElementById("transcription");
-var bell = new WaveBell();
+var transH = document.getElementById("transcription-hidden");
 var lang = $("#lang").text();
+var filePath = $("#file-path").text();
+var $spinner = $("#spinner");
 
 // on lcik of listen
 // Disabling autoDiscover, otherwise Dropzone will try to attach twice.
@@ -16,32 +16,59 @@ var lang = $("#lang").text();
 // event listeners
 //   myDropzone.on("addedfile", function(file) {
 
-btn.addEventListener("click", function(e) {
-	bell.start(1000 / 25);
-	$.ajax({
-		url: "/listen",
-		data: { lang: lang }
-	}).done(function(data) {
-		trans.innerText = data;
-		if (lang.split("-")[0] == "en") {
-			get_sentiment(data, "en");
-		}
-		bell.stop();
+$(function() {
+	$spinner.hide();
+	btn.addEventListener("click", function(e) {
+		$spinner.show();
+		$.ajax({
+			url: "/listen",
+			data: { lang: lang }
+		}).done(function(data) {
+			trans.innerText = data;
+			if (lang.split("-")[0] == "en") {
+				get_sentiment(data, "en");
+			}
+			$spinner.hide();
+		});
+	});
+
+	btnTranscribe.addEventListener("click", function(e) {
+		trans.innerText = "Wait...";
+		$.ajax({
+			url: "/transcribe",
+			data: { lang: lang }
+		}).done(function(res) {
+			data = processResp(res["result"]);
+			trans.innerHTML = data["html"];
+			transH.innerText = data["plainText"];
+			if (lang.split("-")[0] == "en") {
+				get_sentiment(data["plainText"]);
+				updateProgBars();
+			}
+		});
 	});
 });
 
-btnTranscribe.addEventListener("click", function(e) {
-	trans.innerText = "Wait...";
-	$.ajax({
-		url: "/transcribe",
-		data: { lang: lang }
-	}).done(function(data) {
-		trans.innerText = data;
-		if (lang.split("-")[0] == "en") {
-			get_sentiment(data, "en");
+function processResp(res) {
+	let sentences = "";
+	let plainSentences = "";
+	for (let i = 0; i < res.length; i++) {
+		let sentence = "";
+		let plainSentence = "";
+		let words = res[i]["words"];
+		for (let j = 0; j < words.length; j++) {
+			let obj = words[j];
+			let word = obj.word;
+			let speaker = obj.speakerTag;
+			let text = `<span class="trans-speaker-${speaker}" data-speaker="${speaker}" data-toggle="tooltip" data-placement="top" title="Speaker-${speaker}"> ${word} </span>`;
+			sentence += text;
+			plainSentence += word + " ";
 		}
-	});
-});
+		sentences += sentence;
+		plainSentences += plainSentence;
+	}
+	return { html: sentences, plainText: plainSentences };
+}
 
 function get_sentiment(text, lang = "en") {
 	$.post(
@@ -51,75 +78,63 @@ function get_sentiment(text, lang = "en") {
 			inputLanguage: lang
 		},
 		function(data) {
-			percent = (parseFloat(data["documents"][0]["score"]) * 100).toFixed(2);
-			console.log(percent);
-			$("#prog-bar").css({
-				width: `${percent}%`
-			});
-			$("#prog-val").text(percent);
+			let textHtml = "";
+			let $progBar = $("#prog-bar");
+			for (let i = 0; i < data["sentences"].length; i++) {
+				let t = data["sentences"][i]["text"]["content"];
+				let c = "";
+				let score = data["sentences"][i]["sentiment"]["score"];
+				let magnitude = data["sentences"][i]["sentiment"]["magnitude"];
+				if (score < -0.15) {
+					c = "text-danger";
+				} else if (score > 0.15) {
+					c = "text-success";
+				}
+				if (t.length) {
+					textHtml += `<span class="${c}" data-toggle="tooltip" data-placement="top" title="Score: ${score}, Magnitude: ${magnitude}"> ${t}. </span>`;
+				}
+			}
+			// append the html
+			$("#sentiment-text").html(textHtml);
 		}
 	);
 }
 
-window.addEventListener("load", function(e) {
-	// start animation on loaded
-	animate();
-});
-
-var currentValue = 0;
-
-// buffered wave data
-var BUF_SIZE = 500;
-var buffer = new Array(BUF_SIZE).fill(0);
-var cursor = 0;
-
-bell.on("wave", function(e) {
-	// update current wave value
-	currentValue = e.value;
-});
-
-bell.on("start", function() {
-	btn.innerHTML = '<i class="fa fa-pause"></i>';
-	btn.setAttribute("disabled", true);
-});
-bell.on("stop", function() {
-	btn.innerHTML = '<i class="fa fa-play"></i>';
-	btn.removeAttribute("disabled");
-	currentValue = 0;
-});
-
-function updateBuffer() {
-	// loop update buffered data
-	buffer[cursor++ % BUF_SIZE] = currentValue;
+function updateProgBars() {
+	var speaker1Text = getSpeakerText("1");
+	var speaker2Text = getSpeakerText("2");
+	updateProgBar($("#prog-bar-1"), speaker1Text);
+	updateProgBar($("#prog-bar-2"), speaker2Text);
 }
 
-function drawFrame() {
-	ctx.save();
-	// empty canvas
-	ctx.clearRect(0, 0, 500, 300);
-	// draw audio waveform
-	ctx.strokeStyle = "#f96332";
-	for (var i = 0; i < BUF_SIZE; i++) {
-		var h = 250 * buffer[(cursor + i) % BUF_SIZE];
-		var x = i;
-		ctx.beginPath();
-		ctx.moveTo(x, 150.5 - 0.5 * h);
-		ctx.lineTo(x, 150.5 + 0.5 * h);
-		ctx.stroke();
-	}
-	// draw middle line
-	ctx.beginPath();
-	ctx.moveTo(0, 150.5);
-	ctx.lineTo(500, 150.5);
-	ctx.strokeStyle = "#000";
-	ctx.stroke();
-	ctx.restore();
+function getSpeakerText(speaker) {
+	var span = $(".trans-speaker-" + speaker);
+	var text = "";
+	var textArr = span.map((currentValue, index, arr) => {
+		text += span[currentValue].innerText;
+		return span[currentValue].innerText;
+	});
+	return text;
 }
 
-function animate() {
-	requestAnimationFrame(animate);
-	// update wave data
-	updateBuffer();
-	// draw next frame
-	drawFrame();
+function updateProgBar($progBar, text) {
+	$.post(
+		"/sentiment",
+		{
+			inputText: text,
+			inputLanguage: lang
+		},
+		function(data) {
+			let documentScore = data["documentSentiment"]["score"];
+			if (documentScore > 0) {
+				$progBar.removeClass("bg-danger").addClass("bg-success");
+			} else if (documentScore < 0) {
+				$progBar.removeClass("bg-success").addClass("bg-danger");
+			}
+			$progBar.css({
+				width: `${Math.abs(documentScore) * 100}%`
+			});
+			$("#prog-val").text(documentScore);
+		}
+	);
 }

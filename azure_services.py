@@ -61,16 +61,17 @@ def get_sentiment(input_text, input_language='en'):
         'Content-type': 'application/json',
         'X-ClientTraceId': str(uuid.uuid4())
     }
-
+    input_text = input_text.split(".")
     # You can pass more than one object in body.
-    body = {
-        'documents': [
-            {
+    body = {'documents': []}
+    for i, text in enumerate(input_text):
+        if(len(text)):
+            obj = {
                 'language': input_language,
-                'id': '1',
-                'text': input_text
+                'id': str(i+1),
+                'text': text
             }
-        ]
-    }
+            body['documents'].append(obj)
+
     response = requests.post(constructed_url, headers=headers, json=body)
     return response.json()

@@ -12,6 +12,7 @@ from logging import Formatter, FileHandler
 import os
 # import speech_recognition as
 import azure_services as azs
+import gcp_services as gcs
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -100,14 +101,12 @@ def listen():
     return res, '200'
 
 
-ALLOWED_EXTENSIONS = {'wav', 'mp3', 'ogg', 'raw', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'wav'}
 
 
 def allowed_file(filename):
-    # return '.' in filename and \
-    #        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-    return True
-
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # @app.route('/transcribe', methods=['GET', 'POST'])
 # def upload_file():
@@ -133,6 +132,7 @@ def allowed_file(filename):
 #                 return render_template('pages/placeholder.home.html', value=res)
 #     return 'NOT OK', 200
 
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
@@ -148,26 +148,27 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(filepath)
-            return 'OK', 200
+            # filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'testing.wav'))
+            return './static/uploads/'+filename, 200
 
 
 @app.route('/transcribe', methods=['GET'])
 def transcribe():
     filepath = './static/uploads/testing.wav'
     lang = request.args.get('lang')
-    res = azs.transcribe(filepath, lang)
-    print(res)
-    return res
+    if lang == 'en-US':
+        res = gcs.sample_recognize(filepath, lang)
+    else:
+        res = gcs.sample_recognize(filepath, lang, model="default")
+    return {"result": res}
 
 
 @app.route('/sentiment', methods=['POST'])
 def sentiment():
     data = request.form
     input_text = data.get('inputText')
-    input_lang = data.get('inputLanguage')
-    res = azs.get_sentiment(input_text, input_lang)
+    res = gcs.analyze_sentiment(input_text)
     return res, '200'
 # @app.route('/about')
 # def about():
@@ -231,4 +232,4 @@ if __name__ == '__main__':
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=5000)
