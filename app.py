@@ -17,7 +17,7 @@ import gcp_services as gcs
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
-
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/home/ubuntu/.gcp_cloud_text.json"
 app = Flask(__name__)
 app.config.from_object('config')
 UPLOAD_FOLDER = './static/uploads'
@@ -232,4 +232,5 @@ if __name__ == '__main__':
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=5000)
+    print(port)
+    app.run(host='0.0.0.0', port=80)
