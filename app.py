@@ -101,14 +101,12 @@ def listen():
     return res, '200'
 
 
-ALLOWED_EXTENSIONS = {'wav', 'mp3', 'ogg', 'raw', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'wav'}
 
 
 def allowed_file(filename):
-    # return '.' in filename and \
-    #        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-    return True
-
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # @app.route('/transcribe', methods=['GET', 'POST'])
 # def upload_file():
@@ -133,6 +131,7 @@ def allowed_file(filename):
 #                 res = transcribe(audio, r)
 #                 return render_template('pages/placeholder.home.html', value=res)
 #     return 'NOT OK', 200
+
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():

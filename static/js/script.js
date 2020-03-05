@@ -43,6 +43,7 @@ $(function() {
 			transH.innerText = data["plainText"];
 			if (lang.split("-")[0] == "en") {
 				get_sentiment(data["plainText"]);
+				updateProgBars();
 			}
 		});
 	});
@@ -59,7 +60,7 @@ function processResp(res) {
 			let obj = words[j];
 			let word = obj.word;
 			let speaker = obj.speakerTag;
-			let text = `<span data-speaker="${speaker}" data-toggle="tooltip" data-placement="top" title="Speaker-${speaker}"> ${word} </span>`;
+			let text = `<span class="trans-speaker-${speaker}" data-speaker="${speaker}" data-toggle="tooltip" data-placement="top" title="Speaker-${speaker}"> ${word} </span>`;
 			sentence += text;
 			plainSentence += word + " ";
 		}
@@ -78,6 +79,7 @@ function get_sentiment(text, lang = "en") {
 		},
 		function(data) {
 			let textHtml = "";
+			let $progBar = $("#prog-bar");
 			for (let i = 0; i < data["sentences"].length; i++) {
 				let t = data["sentences"][i]["text"]["content"];
 				let c = "";
@@ -94,15 +96,41 @@ function get_sentiment(text, lang = "en") {
 			}
 			// append the html
 			$("#sentiment-text").html(textHtml);
+		}
+	);
+}
 
+function updateProgBars() {
+	var speaker1Text = getSpeakerText("1");
+	var speaker2Text = getSpeakerText("2");
+	updateProgBar($("#prog-bar-1"), speaker1Text);
+	updateProgBar($("#prog-bar-2"), speaker2Text);
+}
+
+function getSpeakerText(speaker) {
+	var span = $(".trans-speaker-" + speaker);
+	var text = "";
+	var textArr = span.map((currentValue, index, arr) => {
+		text += span[currentValue].innerText;
+		return span[currentValue].innerText;
+	});
+	return text;
+}
+
+function updateProgBar($progBar, text) {
+	$.post(
+		"/sentiment",
+		{
+			inputText: text,
+			inputLanguage: lang
+		},
+		function(data) {
 			let documentScore = data["documentSentiment"]["score"];
-			let $progBar = $("#prog-bar");
 			if (documentScore > 0) {
 				$progBar.removeClass("bg-danger").addClass("bg-success");
 			} else if (documentScore < 0) {
 				$progBar.removeClass("bg-success").addClass("bg-danger");
 			}
-
 			$progBar.css({
 				width: `${Math.abs(documentScore) * 100}%`
 			});
